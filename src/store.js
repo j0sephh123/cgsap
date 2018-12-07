@@ -13,13 +13,7 @@ export default new Vuex.Store({
       max: 300,
     },
     rects: [
-      {id: 1, name: 'uno' , active: true , pos: {
-        x: 1, y: 1,
-      }},
-      {id: 2, name: 'dos',  active: false, pos: {
-        x: 1, y: 1,
-      }},
-      {id: 3, name: 'tres' , active: false, pos: {
+      {id: 1, name: '1' , active: true , pos: {
         x: 1, y: 1,
       }},
     ],
@@ -46,6 +40,21 @@ export default new Vuex.Store({
     },
     setRange(state, range) {
       state.range.value = range;
+    },
+    addRemove(state, {action, rect}) {
+      let id = state.rects[state.rects.length - 1]['id'] + 1;
+      if(action === 'add') {
+        let newRect = {
+          id, 
+          name: id.toString(), 
+          active: false , pos: {
+            x: 1, y: 1,
+          }
+        };
+        state.rects.push(newRect);
+      } else if (action === 'remove') {
+        state.rects = state.rects.filter(r => r.id !== rect);
+      }
     },
   },
   actions: {

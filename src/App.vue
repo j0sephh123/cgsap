@@ -10,7 +10,11 @@
       <div
         @click="click(rect, $event)" 
         :class="rect.active ? 'rect active-rect' : 'rect'">
-        <span>{{rect.name}}</span><br>
+        <span>{{rect.name}}</span>
+        <button 
+          class="button"
+          @click.stop="$store.commit('addRemove', {action: 'remove', rect: rect.id})">Click</button>
+        <br>
         <span>x: {{rect.pos.x}} </span>
         <span>y: {{rect.pos.y}} </span>
         
@@ -60,26 +64,17 @@ export default {
         height : e.target.offsetHeight,
       }
 
-      // let top    = e.target.offsetTop;
-      // let left   = e.target.offsetLeft;
-      // let width  = e.target.offsetWidth;
-      // let height = e.target.offsetHeight;
-      // console.log(e);
       if(e.target.tagName === 'SPAN') {
-        offset.top     = e.target.parentNode.offsetTop;
-        offset.left    = e.target.parentNode.offsetLeft;
-        offset.width   = e.target.parentNode.offsetWidth;
-        offset.height  = e.target.parentNode.offsetHeight;
-        
-      }
+        for (const i in offset) {
+          let c = i
+            .split(' ')
+            .map((s) => s.charAt(0).toUpperCase() + s.substring(1))
+            .join(' ');
 
-
-      console.log('top -> ',    offset.top);
-      console.log('left -> ',   offset.left);
-      console.log('width -> ',  offset.width);
-      console.log('height -> ', offset.height);
-    
-
+          offset[i] = e.target.parentNode[`offset${c}`];
+        }
+      } // if span element, go to parentNode for coordinates, doesn't always work.
+      console.log(offset);
 
       this.$store.commit('selectRect', rect.id)
     },
@@ -101,13 +96,13 @@ export default {
 .rect {
   cursor: pointer;
   border: 1px solid black;
-  padding: 20px;
+  padding: 10px;
   margin: 10px 0px;
   display: inline-block;
 }
 .active-rect {
-  border: 5px solid black;
-  font-size: 22px;
+  border: 3px solid black;
+  font-size: 18px;
 }
 
 </style>
