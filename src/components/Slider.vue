@@ -7,15 +7,20 @@
     
     :step="1" 
     :min="0" 
-    :max="100" 
-    :value="50"
+    :max="range.max" 
+    :value="range.value"
     >
-  <output for="sliderWithValue">50</output>
+  <output for="sliderWithValue">{{range.value}}</output>
 </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
+  computed: {
+    ...mapGetters(['range'])
+  },  
   mounted() {
     var sliders = document.querySelectorAll( 'input[type="range"].slider' );
     
@@ -31,7 +36,7 @@ export default {
         }
 
         // Add event listener to update output when slider value change
-        slider.addEventListener( 'input', function( event ) {
+        slider.addEventListener( 'input', ( event ) => {
           if ( event.target.classList.contains( 'has-output-tooltip' ) ) {
             // Get new output position
             var newPosition = getSliderOutputPosition( event.target );
@@ -39,7 +44,7 @@ export default {
             // Set output position
             output.style[ 'left' ] = newPosition.position;
           }
-          // console.log(event.target.value);
+          this.$store.commit('setRange', event.target.value)
           // Update output with slider value
           output.value = event.target.value;
         } );

@@ -3,26 +3,25 @@
 <div class="box">
   <div class="columns is-multiline">
     <div 
-        v-for="rect in rects" 
-        :key="rect.id"
-        class="column is-12"
-        >
-        <div
-          @click="$store.commit('selectRect', rect.id)" 
-          :class="rect.active ? 'rect active-rect' : 'rect'">
-          {{rect.name}}
-        </div>
+      v-for="rect in rects" 
+      :key="rect.id"
+      class="column is-12"
+      >
+      <div
+        @click="click(rect, $event)" 
+        :class="rect.active ? 'rect active-rect' : 'rect'">
+        <span>{{rect.name}}</span><br>
+        <span>x: {{rect.pos.x}} </span>
+        <span>y: {{rect.pos.y}} </span>
+        
+      </div>
     </div>
   </div>
 
   <div class="field">
-
     <slider></slider>
-
     <controls></controls>
-
   </div>
-
 
   <modal></modal>
 </div>
@@ -53,15 +52,45 @@ export default {
     change(e) {
       this.range.value = +e.target.value;
     },
+    click(rect, e) {
+      const offset = {
+        top    : e.target.offsetTop,
+        left   : e.target.offsetLeft,
+        width  : e.target.offsetWidth,
+        height : e.target.offsetHeight,
+      }
 
+      // let top    = e.target.offsetTop;
+      // let left   = e.target.offsetLeft;
+      // let width  = e.target.offsetWidth;
+      // let height = e.target.offsetHeight;
+      // console.log(e);
+      if(e.target.tagName === 'SPAN') {
+        offset.top     = e.target.parentNode.offsetTop;
+        offset.left    = e.target.parentNode.offsetLeft;
+        offset.width   = e.target.parentNode.offsetWidth;
+        offset.height  = e.target.parentNode.offsetHeight;
+        
+      }
+
+
+      console.log('top -> ',    offset.top);
+      console.log('left -> ',   offset.left);
+      console.log('width -> ',  offset.width);
+      console.log('height -> ', offset.height);
+    
+
+
+      this.$store.commit('selectRect', rect.id)
+    },
   },
   watch: {
-    '$store.state.range': {
-      handler(v) {
-        console.log(v);
-      },
-      deep: true,
-    },
+    // '$store.state.range': {
+    //   handler(v) {
+    //     console.log(v);
+    //   },
+    //   deep: true,
+    // },
     select(val) {
       this.$store.commit('selectRect', val);
     },

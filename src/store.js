@@ -13,9 +13,15 @@ export default new Vuex.Store({
       max: 300,
     },
     rects: [
-      {id: 1, name: 'first' , active: true},
-      {id: 2, name: 'second', active: false},
-      {id: 3, name: 'third' , active: false},
+      {id: 1, name: 'uno' , active: true , pos: {
+        x: 1, y: 1,
+      }},
+      {id: 2, name: 'dos',  active: false, pos: {
+        x: 1, y: 1,
+      }},
+      {id: 3, name: 'tres' , active: false, pos: {
+        x: 1, y: 1,
+      }},
     ],
     select: 1,
   },
@@ -37,7 +43,10 @@ export default new Vuex.Store({
         }
         return rect;
       })
-    }
+    },
+    setRange(state, range) {
+      state.range.value = range;
+    },
   },
   actions: {
 
